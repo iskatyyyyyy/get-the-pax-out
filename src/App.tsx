@@ -758,6 +758,7 @@ function OpeningGate({
 type RealityItem = {
   claim: string;
   claimSource: string;
+  fieldSummary: string;
   fieldNote: string;
   fieldSource: string;
 };
@@ -766,6 +767,8 @@ const realityPairs: RealityItem[] = [
   {
     claim: "Pax Silica will generate over 130,000 high-quality jobs for local communities.",
     claimSource: "BCDA / PCO PROJECT BRIEF · 2026",
+    fieldSummary:
+      "Automated server halls add few lasting jobs—while risking Tarlac farms and Aeta homes.",
     fieldNote:
       "Hyperscale server halls are heavily automated and keep minimal permanent staff after construction—while threatening to displace hundreds of Tarlac farmers and Indigenous Aeta families from productive land.",
     fieldSource: "HARVARD GAZETTE · HRW · CEC PHILIPPINES · 2026",
@@ -773,6 +776,8 @@ const realityPairs: RealityItem[] = [
   {
     claim: "Advanced cooling designs will keep water consumption minimal and safe.",
     claimSource: "PAX SILICA PROMOTIONAL BRIEF · 2026",
+    fieldSummary:
+      "Evaporative cooling draws 1.7M–18.9M L/day—mostly lost to air—straining local watersheds.",
     fieldNote:
       "Large evaporative-cooled campuses draw 1.7M to 18.9M liters per day—mostly lost to evaporation—prompting Filipino engineers (PROPEL) and AGU Advances researchers to warn of acute watershed stress.",
     fieldSource: "BULATLAT · AGU ADVANCES · EESI · 2026",
@@ -780,6 +785,8 @@ const realityPairs: RealityItem[] = [
   {
     claim: "The hub will modernize Luzon's power grid without raising household bills.",
     claimSource: "LUZON CORRIDOR PITCH · 2026",
+    fieldSummary:
+      "Ireland's hubs take 20.7% of grid power; Virginia rates jumped 10×, raising home bills.",
     fieldNote:
       "Ireland's data centers already take 20.7% of national metered electricity (6,335 GWh), and Virginia's PJM capacity auction jumped over tenfold—shifting grid upgrade costs directly onto residential bills.",
     fieldSource: "CSO IRELAND 2023 · EHP 2026",
@@ -787,6 +794,8 @@ const realityPairs: RealityItem[] = [
   {
     claim: "Affected Tarlac residents will receive fair, modern resettlement housing.",
     claimSource: "NEW CLARK CITY RELOCATION PLAN · 2026",
+    fieldSummary:
+      "Aeta leaders rejected 30 sqm 'matchbox' units that sever access to farms, water, and life.",
     fieldNote:
       "Aeta Hungey chieftain Petronila Capiz-Muñoz rejected 30-square-meter 'matchbox' units, stressing that losing ancestral farmland strips communities of water, worship, and generational livelihood.",
     fieldSource: "PHILIPPINE DAILY INQUIRER · HRW · 2026",
@@ -794,6 +803,8 @@ const realityPairs: RealityItem[] = [
   {
     claim: "Data centers are clean, silent digital infrastructure safe beside homes.",
     claimSource: "INDUSTRY SITING NARRATIVE · 2026",
+    fieldSummary:
+      "24/7 chillers hit 85–90 dB, emit PM2.5/NOx, and MIT tied U.S. hub power to ~650 deaths.",
     fieldNote:
       "24/7 chillers and diesel generators produce continuous hum up to 85–90 dB on-site, emit PM2.5 and NOx, and MIT linked 2023 U.S. data center power demand to ~650 premature deaths downwind.",
     fieldSource: "EHP · EESI · MIT NEWS · 2026",
@@ -801,6 +812,8 @@ const realityPairs: RealityItem[] = [
   {
     claim: "Existing Philippine studies and bilateral agreements already protect the public.",
     claimSource: "PH–US PAX SILICA DECLARATION · APR 2026",
+    fieldSummary:
+      "CPU warns AI hubs outstrip old studies, yet deals move ahead without FPIC or disclosure.",
     fieldNote:
       "CPU chair Ian Aragoza warned AI-scale hubs introduce unprecedented burdens where old studies fail—yet deals advance amid secretive contracts, quitclaim probes, and missing FPIC.",
     fieldSource: "BULATLAT · INQUIRER · 2026",
@@ -841,10 +854,10 @@ function RealityFlashcard({
       <div className="flashcard-gutter" aria-hidden="true">
         <span>REVERSE / FIELD CONDITION</span>
       </div>
-      <section className="flashcard-side flashcard-field">
+      <section className="flashcard-side flashcard-field" style={{ overflow: "hidden" }}>
         <span className="field-tag">FIELD CONDITION / P.{folio}</span>
         <p>WHAT'S ON THE GROUND</p>
-        <h3>{pair.fieldNote}</h3>
+        <h3>{pair.fieldSummary}</h3>
         <small>{pair.fieldSource}</small>
       </section>
       <button
@@ -968,12 +981,12 @@ type ResearchItem = {
 };
 
 const researchPaperLayouts = [
-  { x: 2.5, y: 95, partX: -70, partY: -36 },
-  { x: 17.8, y: 70, partX: -34, partY: -44 },
-  { x: 33.1, y: 55, partX: -12, partY: -40 },
-  { x: 47.9, y: 75, partX: 8, partY: -44 },
-  { x: 62.7, y: 100, partX: 26, partY: -40 },
-  { x: 76.3, y: 70, partX: 70, partY: -36 },
+  { x: 2.5, y: 75, partX: -70, partY: -135 },
+  { x: 17.8, y: 55, partX: -34, partY: -150 },
+  { x: 33.1, y: 45, partX: -12, partY: -155 },
+  { x: 47.9, y: 55, partX: 8, partY: -155 },
+  { x: 62.7, y: 75, partX: 26, partY: -150 },
+  { x: 76.3, y: 55, partX: 70, partY: -135 },
   { x: 7.6, y: 330, partX: -150, partY: -32 },
   { x: 15.3, y: 455, partX: -230, partY: -8 },
   { x: 7.6, y: 580, partX: -150, partY: 24 },
@@ -1686,6 +1699,47 @@ export default function App() {
     () => Math.round((powerHomes / communityHouseholds) * 100),
     [powerHomes, communityHouseholds],
   );
+  const affectedFamilies = useMemo(
+    () => Math.round(centers * 85 * (0.6 + population / 125)),
+    [centers, population],
+  );
+  const liveImpactMeters = useMemo(
+    () => [
+      {
+        name: "WATER",
+        value: waterSharePct,
+        max: 150,
+        displayValue: `${(centers * 1.7).toFixed(1)}M L/DAY`,
+        source: "LBNL · EESI",
+        comparison: `≈ ${waterHomes.toLocaleString()} homes (${waterSharePct}% of ${population}K town)`,
+      },
+      {
+        name: "POWER",
+        value: powerSharePct,
+        max: 800,
+        displayValue: `${(centers * 150).toLocaleString()} MWh/DAY`,
+        source: "LBNL 2024",
+        comparison: `≈ ${powerHomes.toLocaleString()} homes (${powerSharePct}% of ${population}K town)`,
+      },
+      {
+        name: "LAND",
+        value: centers * 15,
+        max: 150,
+        displayValue: `${centers * 15} HA`,
+        source: "NL · TARLAC REF",
+        comparison: `≈ ${centers * 21} city blocks (${Math.max(1, Math.round(((centers * 15) / 1619) * 100))}% of Pax Silica)`,
+      },
+      {
+        name: "LIVELIHOOD",
+        value: affectedFamilies,
+        max: 1800,
+        displayValue: `~${affectedFamilies.toLocaleString()}`,
+        source: "HRW · TARLAC",
+        comparison: `farming & barangay families at risk in ${population}K zone`,
+      },
+    ],
+    [centers, population, waterHomes, powerHomes, waterSharePct, powerSharePct, affectedFamilies],
+  );
   const activeRecipient = recipientProfiles[recipient] ?? recipientProfiles.Mayor;
   const emailText = activeRecipient.body;
   const selectedPinX = (selectedCase.x / 100) * 900;
@@ -1791,72 +1845,81 @@ export default function App() {
       <div className="cursor-coords" aria-hidden="true">
         X {String(cursor.x).padStart(4, "0")} · Y {String(cursor.y).padStart(4, "0")}
       </div>
-      <nav className="nav" aria-label="Main navigation">
-        <button className="brand" onClick={() => scrollTo("top")}>
-          <LogoImage />
-          <span className="brand-wordmark">
-            <b>A DROP IN THE CLOUD</b>
-            <small>OPPOSING THE PAX SILICA PROJECT</small>
-          </span>
-        </button>
-        <button
-          className="menu-toggle"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-expanded={menuOpen}
+      <div style={{ position: "sticky", top: 0, zIndex: 45 }}>
+        <nav
+          className="nav"
+          aria-label="Main navigation"
+          style={{ position: "relative", zIndex: 2 }}
         >
-          MENU {menuOpen ? "×" : "+"}
-        </button>
-        <div className={`nav-links ${menuOpen ? "open" : ""}`}>
-          <div className="nav-drop">
-            <button onClick={() => scrollTo("issue")}>
-              The Issue <span>⌄</span>
-            </button>
-            <div>
-              <button onClick={() => scrollTo("overview")}>Overview</button>
-              <button onClick={() => scrollTo("reality")}>Reality Check</button>
-              <button onClick={() => scrollTo("scenarios")}>Future Scenarios</button>
+          <button className="brand" onClick={() => scrollTo("top")}>
+            <LogoImage />
+            <span className="brand-wordmark">
+              <b>A DROP IN THE CLOUD</b>
+              <small>OPPOSING THE PAX SILICA PROJECT</small>
+            </span>
+          </button>
+          <button
+            className="menu-toggle"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-expanded={menuOpen}
+          >
+            MENU {menuOpen ? "×" : "+"}
+          </button>
+          <div className={`nav-links ${menuOpen ? "open" : ""}`}>
+            <div className="nav-drop">
+              <button onClick={() => scrollTo("issue")}>
+                The Issue <span>⌄</span>
+              </button>
+              <div>
+                <button onClick={() => scrollTo("overview")}>Overview</button>
+                <button onClick={() => scrollTo("reality")}>Reality Check</button>
+                <button onClick={() => scrollTo("scenarios")}>Future Scenarios</button>
+              </div>
             </div>
-          </div>
-          <div className="nav-drop">
-            <button onClick={() => scrollTo("data")}>
-              Data &amp; Global Impact <span>⌄</span>
-            </button>
-            <div>
-              <button onClick={() => scrollTo("case-studies")}>Global Case Studies</button>
-              <button onClick={() => scrollTo("simulator")}>What We Stand to Lose</button>
+            <div className="nav-drop">
+              <button onClick={() => scrollTo("data")}>
+                Data &amp; Global Impact <span>⌄</span>
+              </button>
+              <div>
+                <button onClick={() => scrollTo("case-studies")}>Global Case Studies</button>
+                <button onClick={() => scrollTo("simulator")}>What We Stand to Lose</button>
+              </div>
             </div>
+            <button onClick={() => scrollTo("research")}>Research &amp; Literature</button>
+            <button onClick={() => scrollTo("voices")}>Voices of the People</button>
+            <button onClick={() => scrollTo("policy")}>Policy Explainer</button>
+            <button className="orange-button compact-button" onClick={() => scrollTo("action")}>
+              Take Action ↗
+            </button>
           </div>
-          <button onClick={() => scrollTo("research")}>Research &amp; Literature</button>
-          <button onClick={() => scrollTo("voices")}>Voices of the People</button>
-          <button onClick={() => scrollTo("policy")}>Policy Explainer</button>
-          <button className="orange-button compact-button" onClick={() => scrollTo("action")}>
-            Take Action ↗
+        </nav>
+        <div
+          className="protest-ticker"
+          style={{ position: "relative", top: "auto", zIndex: 1 }}
+        >
+          <div className="ticker-track" aria-hidden="true">
+            <span>
+              TUBIG AY BUHAY • KURYENTE SA BAYAN • LUPA NAMIN ITO • KABUHAYAN AY IPAGLABAN • KONSULTA
+              MUNA • HUWAG IPAGPALIT ANG TAHANAN • WALANG KONSULTASYON, WALANG PAX SILICA • NO TO PAX
+              SILICA •&nbsp;
+            </span>
+            <span>
+              TUBIG AY BUHAY • KURYENTE SA BAYAN • LUPA NAMIN ITO • KABUHAYAN AY IPAGLABAN • KONSULTA
+              MUNA • HUWAG IPAGPALIT ANG TAHANAN • WALANG KONSULTASYON, WALANG PAX SILICA • NO TO PAX
+              SILICA •&nbsp;
+            </span>
+          </div>
+          <button
+            className={`sound-toggle ${soundOn ? "on" : ""}`}
+            onClick={() => setSoundOn((on) => !on)}
+            aria-pressed={soundOn}
+          >
+            SOUND {soundOn ? "ON" : "OFF"}
           </button>
         </div>
-      </nav>
-      <div className="protest-ticker">
-        <div className="ticker-track" aria-hidden="true">
-          <span>
-            TUBIG AY BUHAY • KURYENTE SA BAYAN • LUPA NAMIN ITO • KABUHAYAN AY IPAGLABAN • KONSULTA
-            MUNA • HUWAG IPAGPALIT ANG TAHANAN • WALANG KONSULTASYON, WALANG PAX SILICA • NO TO PAX
-            SILICA •&nbsp;
-          </span>
-          <span>
-            TUBIG AY BUHAY • KURYENTE SA BAYAN • LUPA NAMIN ITO • KABUHAYAN AY IPAGLABAN • KONSULTA
-            MUNA • HUWAG IPAGPALIT ANG TAHANAN • WALANG KONSULTASYON, WALANG PAX SILICA • NO TO PAX
-            SILICA •&nbsp;
-          </span>
-        </div>
-        <button
-          className={`sound-toggle ${soundOn ? "on" : ""}`}
-          onClick={() => setSoundOn((on) => !on)}
-          aria-pressed={soundOn}
-        >
-          SOUND {soundOn ? "ON" : "OFF"}
-        </button>
       </div>
 
-      <main id="top">
+      <main id="top" style={{ position: "relative", zIndex: 1 }}>
         <div className="world-one blueprint-surface">
           <section className="hero blueprint-section" ref={heroRef}>
             <DraftMarks sheet="A-001" />
@@ -2120,22 +2183,22 @@ export default function App() {
                 </g>
 
                 <g fill={W} fontFamily="IBM Plex Mono" fontSize="12" letterSpacing="1">
-                  <text x="40" y="238">
+                  <text x="40" y="258">
                     BARANGAY ROAD
                   </text>
                   <text x="276" y="76">
                     PROPOSED DATA CENTER FOOTPRINT
                   </text>
-                  <text x="276" y="116" fill={C} fontSize="11">
+                  <text x="276" y="110" fill={C} fontSize="11">
                     1,619 ha HUB (NEW CLARK CITY)
                   </text>
-                  <text x="600" y="156">
+                  <text x="600" y="160">
                     ELECTRICAL SUBSTATION
                   </text>
                   <text x="40" y="438">
                     AQUIFER / SHARED WATER
                   </text>
-                  <text x="430" y="322" fill="#FF7A1A" fontSize="10">
+                  <text x="480" y="322" fill="#FF7A1A" fontSize="10">
                     DRAW ~1.7M L/DAY
                   </text>
                 </g>
@@ -2463,9 +2526,9 @@ export default function App() {
               </article>
             </div>
             <div className="impact-gauges">
-              {impactMeters.map((meter) => {
+              {liveImpactMeters.map((meter) => {
                 const fraction = Math.max(0, Math.min(1, meter.value / meter.max));
-                const needleAngle = -90 + fraction * 180;
+                const needleAngle = -180 + fraction * 180;
                 return (
                   <div className="gauge" key={meter.name}>
                     <svg preserveAspectRatio="xMidYMid meet" viewBox="0 0 180 110" aria-hidden="true">
@@ -2493,7 +2556,11 @@ export default function App() {
                       </g>
                       <g
                         className="gauge-needle"
-                        style={{ transform: `rotate(${needleAngle.toFixed(2)}deg)` }}
+                        style={{
+                          transform: `rotate(${needleAngle.toFixed(2)}deg)`,
+                          transformOrigin: "90px 88px",
+                          transition: "transform 280ms ease-out",
+                        }}
                       >
                         <path
                           d="M90 88 154 88"
@@ -2548,12 +2615,16 @@ export default function App() {
               </div>
               <div className="sim-output">
                 <span>DAILY WATER ≈</span>
-                <strong>{waterHomes.toLocaleString()}</strong>
-                <b>HOUSEHOLDS</b>
+                <strong>{waterSharePct}%</strong>
+                <b>
+                  OF {population}K TOWN ({waterHomes.toLocaleString()} HOMES)
+                </b>
                 <i />
                 <span>DAILY ELECTRICITY ≈</span>
-                <strong>{powerHomes.toLocaleString()}</strong>
-                <b>HOMES</b>
+                <strong>{powerSharePct}%</strong>
+                <b>
+                  OF {population}K TOWN ({powerHomes.toLocaleString()} HOMES)
+                </b>
               </div>
               <small className="formula">
                 Baseline per facility: ~1.7M L/day evaporative cooling (~600 L/PH household) and
@@ -2599,7 +2670,10 @@ export default function App() {
                 ))}
               </div>
               <div className="research-stage">
-                <div className="takeover-panel">
+                <div
+                  className="takeover-panel"
+                  style={{ transform: "translateY(28px)" }}
+                >
                   <div className="quote-blueprint">
                     <small>PEOPLE'S ANNOTATION / REV 04</small>
                     <span>A plan drawn</span> <u>without the people</u> <span>is not a plan.</span>{" "}
@@ -2632,6 +2706,7 @@ export default function App() {
                             "--dy": `${moved.y}px`,
                             "--part-x": `${layout.partX}px`,
                             "--part-y": `${layout.partY}px`,
+                            backgroundImage: r.kind === "paper" ? "none" : undefined,
                           } as React.CSSProperties
                         }
                         key={`${r.category}-${i}`}
@@ -2680,8 +2755,17 @@ export default function App() {
                         <span className="paper-category">
                           {r.category} / {r.date}
                         </span>
-                        <h3>{r.title}</h3>
-                        <p>{r.note}</p>
+                        <h3 style={{ wordBreak: "normal", overflowWrap: "normal" }}>{r.title}</h3>
+                        <p
+                          style={{
+                            display: "-webkit-box",
+                            WebkitLineClamp: 3,
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                          }}
+                        >
+                          {r.note}
+                        </p>
                         <small>
                           {r.source} · {r.date} · DRAG / OPEN ↗
                         </small>
